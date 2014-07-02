@@ -1,0 +1,20 @@
+- hosts: all
+user: vagrant
+sudo: no
+
+tasks:
+
+- name: install rvm
+action: shell curl -L https://get.rvm.io | bash -s stable --ruby
+
+- name: install jdk
+apt: name=openjdk-7-jre
+
+- name: install lein
+command: 'wget https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein'
+command: 'echo "export PATH='$PATH:$HOME/bin'" >> /home/vagrant/.bashrc'
+copy: src=lein dest=/home/vagrant/bin
+command: 'chmod 755 ~/bin/lein'
+command: 'lein self-install'
+command: 'echo "{:user {:plugins [[lein-exec "0.3.4"]]}}" >> /home/vagrant/.lein/profiles.clj'
+
